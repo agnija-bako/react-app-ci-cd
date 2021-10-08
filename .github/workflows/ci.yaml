@@ -1,6 +1,6 @@
 name: CI
 
-on: 
+on:
   pull_request:
     branches: [develop]
 
@@ -15,6 +15,6 @@ jobs:
           node-version: "12.x"
       - run: npm ci #install dependencies
       - run: npm run format:check # check code formatting
-      - run: npm test -- --coverage # run test 
+      - run: npm test -- --coverage # run test
         env:
           CI: true # this will remove any use prompts in running the tests
