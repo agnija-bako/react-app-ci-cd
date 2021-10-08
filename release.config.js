@@ -8,8 +8,8 @@ module.exports = {
       "@semantic-release/github",
       {
         assets: [
-          { path: "dist/asset.min.css", label: "CSS distribution" },
-          { path: "dist/asset.min.js", label: "JS distribution" },
+          { path: "build.zip", label: "Build asset" },
+          { path: "coverage.zip", label: "COverage asset" },
         ],
       },
     ],
