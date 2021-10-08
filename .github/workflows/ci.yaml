@@ -60,4 +60,3 @@ jobs:
       - name: Deploy to master
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: npx surge --project ./build --domain https://exultant-day.surge.sh/
-
