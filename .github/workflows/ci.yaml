@@ -2,15 +2,22 @@ name: CI
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [develop, master]
   push:
-    branches: [develop]
+    branches: [develop, master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{runner.os}}-node-${{hashFiles('**/package-lock.json')}} #create cache when our npm dependencies change and when os changes
+          restore-keys: |
+            ${{runner.os}}-node-
       - name: use node.js
         uses: actions/setup-node@v1
         with:
@@ -20,9 +27,25 @@ jobs:
       - run: npm test -- --coverage # run test
         env:
           CI: true # this will remove any use prompts in running the tests
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage
+          path: coverage
       - name: Build project
         if: github.event_name == 'push'
         run: npm run build
+      - name: Upload build folder
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build
+      - name: Create a release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Deploy to staging
         if: github.event_name == 'push'
         run: npx surge --project ./build --domain https://pale-scale.surge.sh/
