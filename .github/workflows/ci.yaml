@@ -59,4 +59,4 @@ jobs:
         run: npx surge --project ./build --domain https://pale-scale.surge.sh/
       - name: Deploy to master
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: npx surge --project ./build --domain https://exultant-day.surge.sh/
+        run: npx surge --project ./build --domain https://thoughtful-flag.surge.sh/
